@@ -1,0 +1,28 @@
+name: 'NPM Authentication'
+description: 'Set username/password authentication credentials for NPM.'
+
+inputs:
+  registry:
+    description: 'NPM registry'
+    required: true
+    default: 'https://nexus.dev.g4m.co.uk/repository/npm/'
+
+  username:
+    description: 'NPM username'
+    required: true
+
+  password:
+    description: 'NPM password'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - run:  echo "registry=${{ inputs.registry }}" >> ~/.npmrc
+      shell: bash
+
+    - run: echo "always-auth=true" >> ~/.npmrc
+      shell: bash
+
+    - run: echo _auth=`echo -n "${{ inputs.username }}:${{ inputs.password }}" | base64` >> ~/.npmrc
+      shell: bash

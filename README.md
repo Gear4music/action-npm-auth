@@ -1,1 +1,1 @@
-# action-node-auth
+# action-npm-auth
