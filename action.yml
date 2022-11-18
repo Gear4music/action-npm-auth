@@ -5,7 +5,6 @@ inputs:
   registry:
     description: 'NPM registry'
     required: true
-    default: 'https://nexus.dev.g4m.co.uk/repository/npm/'
 
   username:
     description: 'NPM username'
@@ -18,11 +17,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run:  echo "registry=${{ inputs.registry }}" >> ~/.npmrc
-      shell: bash
-
-    - run: echo "always-auth=true" >> ~/.npmrc
-      shell: bash
-
-    - run: echo _auth=`echo -n "${{ inputs.username }}:${{ inputs.password }}" | base64` >> ~/.npmrc
+    - run: |
+        AUTH_STRING=`echo -n "${{ inputs.username }}:${{ inputs.password }}" | base64`
+        echo "registry=${{ inputs.registry }}:always-auth=true:_auth=${AUTH_STRING}" >> ~/.npmrc
       shell: bash
